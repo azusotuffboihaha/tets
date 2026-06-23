@@ -1,0 +1,44 @@
+{% extends "app_base.html" %}
+{% block title %}NettSS User #{{ user[0] }}{% endblock %}
+{% block extra_css %}
+    <style>html { overflow-y: scroll !important; }</style>
+{% endblock %}
+{% block body %}
+    <div style="text-align: center;">
+        <h1 onclick="window.location.href = '/admin'"><div class="logo_name"><span style="color: #bc49db;">Nett</span><span>SS</span></div></h1>
+    </div>
+    <div style="padding: 8px 16px !important; margin: 8px 16px !important; border: 2px solid #50407040; border-radius: 8px;">
+        <h1>Editing User #{{ user[0] }}</h1>
+
+        <form method="POST" style="display: inline;">
+            <label>Roblox ID:</label>
+            <input name="roblox_id" value="{{ user[3] }}"/><br>
+
+            <label>Whitelist Level:</label>
+            <input name="whitelist" value="{{ user[4] }}"/><br>
+
+            <button type="submit" style="background-color: var(--nett);">Save</button>
+        </form>
+        <button onclick="window.location.href = '/admin#db'">Go back</button>
+
+        <h2>Discord Data</h2>
+	    <div id="container" style="width:100%; height:420px;"></div>
+	    <script src="/assets/vs/loader.js"></script>
+	    <script defer src="/assets/js/editor.json.js"></script>
+        <script defer>
+            const userData = JSON.stringify(JSON.parse({{ user[5] | tojson }}), null, 2);
+            function trySetText(value) {
+                function trySet() {
+                    try {
+                        setText(userData);
+                    }
+                    catch {
+                        setTimeout(trySet, 100);
+                    }
+                }
+                trySet()
+            }
+            trySetText(userData);
+        </script>
+    </div>
+{% endblock %}
